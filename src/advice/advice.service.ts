@@ -20,7 +20,7 @@ export class AdviceService {
     const startTime = Date.now();
     const apiKey = this.config.get<string>('OPENAI_API_KEY');
 
-    const logoPath = join(__dirname, '..', '..', 'logo.jpg');
+    const logoPath = join(__dirname, '..', '..', 'logo.png');
     const logoBase64 = (await readFile(logoPath)).toString('base64');
 
     const body = {
