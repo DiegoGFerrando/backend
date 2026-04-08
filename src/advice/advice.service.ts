@@ -26,7 +26,7 @@ export class AdviceService {
     const body = {
       model: 'gpt-image-1',
       prompt:
-        'Edit this photo: keep all people, their faces, clothing, and poses exactly as they are. Only replace the background with a futuristic tech environment with neon lights. Add a subtle cyan/purple neon glow effect around the edges of the people. Add a tech neon glow filter to the peoples faces and clothing, but do not alter their natural appearance. Place the logo from the second image in the bottom-right corner of the final image, without its background, at a small size like a watermark. Do not modify the logo in any way, use the original image. Do not apply any filter to the logo',
+        'Edit this photo: keep all people, their faces, clothing, and poses exactly as they are. Only replace the background with a futuristic tech environment with neon lights. Add a subtle cyan/purple neon glow effect around the edges of the people. Add a subtle tech neon glow filter to the peoples faces and clothing, but do not alter their natural appearance. Place the logo from the second image in the bottom-right corner of the final image, without its background, at a small size like a watermark. Do not modify the logo in any way, use the original image. Do not apply any filter to the logo',
       images: [
         { image_url: `data:image/jpeg;base64,${imageBase64}` },
         { image_url: `data:image/jpeg;base64,${logoBase64}` },
