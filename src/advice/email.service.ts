@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as nodemailer from 'nodemailer';
+import type SMTPTransport from 'nodemailer/lib/smtp-transport';
 
 @Injectable()
 export class EmailService {
@@ -9,12 +10,15 @@ export class EmailService {
 
   constructor(private config: ConfigService) {
     this.transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
       auth: {
         user: this.config.get<string>('GMAIL_USER'),
         pass: this.config.get<string>('GMAIL_APP_PASSWORD'),
       },
-    });
+      family: 4,
+    } as SMTPTransport.Options);
   }
 
   async sendResultEmail(
