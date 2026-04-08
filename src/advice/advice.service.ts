@@ -4,7 +4,14 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { writeFile, mkdir, access, copyFile, readFile } from 'fs/promises';
+import {
+  writeFile,
+  mkdir,
+  access,
+  copyFile,
+  readFile,
+  unlink,
+} from 'fs/promises';
 import { join } from 'path';
 import { randomUUID } from 'crypto';
 import sharp from 'sharp';
@@ -51,7 +58,7 @@ export class AdviceService {
         `Failed to connect to OpenAI API | error: ${err instanceof Error ? err.message : err}`,
       );
       throw new InternalServerErrorException(
-        'Could not connect to the AI service. Please try again later.',
+        'No se pudo conectar con el servicio de IA. Por favor, intentá más tarde.',
       );
     }
 
@@ -62,11 +69,11 @@ export class AdviceService {
       );
       if (res.status === 429) {
         throw new InternalServerErrorException(
-          'The AI service is busy. Please wait a moment and try again.',
+          'El servicio de IA está ocupado. Esperá un momento e intentá de nuevo.',
         );
       }
       throw new InternalServerErrorException(
-        'The AI service returned an error. Please try again.',
+        'El servicio de IA devolvió un error. Por favor, intentá de nuevo.',
       );
     }
 
@@ -83,7 +90,7 @@ export class AdviceService {
         `No image in OpenAI response | response: ${JSON.stringify(data).slice(0, 500)}`,
       );
       throw new InternalServerErrorException(
-        'AI did not return an image. Please try again.',
+        'La IA no devolvió una imagen. Por favor, intentá de nuevo.',
       );
     }
 
@@ -157,6 +164,19 @@ export class AdviceService {
       return true;
     } catch {
       return false;
+    }
+  }
+
+  async deleteFiles(imageUrl: string, emailCopyPath: string): Promise<void> {
+    const uploadsDir = join(__dirname, '..', 'uploads');
+    const originalPath = join(uploadsDir, imageUrl.replace('/uploads/', ''));
+    for (const filePath of [originalPath, emailCopyPath]) {
+      try {
+        await unlink(filePath);
+        this.logger.log(`Deleted ${filePath}`);
+      } catch {
+        this.logger.warn(`Could not delete ${filePath}`);
+      }
     }
   }
 }

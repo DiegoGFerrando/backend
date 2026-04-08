@@ -31,19 +31,19 @@ export class EmailService {
     this.logger.log(`Attachment: ${filePath} (${contentType})`);
 
     const mediaHtml = isVideo
-      ? `<p>Thanks for using Advice EdTech. Your AI-transformed video is attached.</p>`
+      ? `<p>Gracias por usar Advice EdTech. Tu video transformado por IA está adjunto.</p>`
       : `<img src="cid:result" alt="Your Transformation" style="max-width: 100%; border-radius: 12px;" />`;
 
     try {
       const info = (await this.transporter.sendMail({
         from: `"Advice EdTech" <${this.config.get<string>('GMAIL_USER')}>`,
         to,
-        subject: 'Your AI-Transformed Photo from Advice EdTech',
+        subject: 'Tu foto transformada por IA - Advice EdTech',
         html: `
           <div style="font-family: sans-serif; text-align: center; padding: 2rem;">
-            <h2 style="color: #7c3aed;">Your Transformation is Ready!</h2>
+            <h2 style="color: #7c3aed;">¡Tu transformación está lista!</h2>
             ${mediaHtml}
-            <p style="color: #888; font-size: 0.85rem;">— Advice EdTech Team</p>
+            <p style="color: #888; font-size: 0.85rem;">— Equipo Advice EdTech</p>
           </div>
         `,
         attachments: [

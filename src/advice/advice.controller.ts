@@ -28,7 +28,7 @@ export class AdviceController {
   )
   async transform(@UploadedFile() file: Express.Multer.File) {
     if (!file) {
-      throw new BadRequestException('No image provided');
+      throw new BadRequestException('No se proporcionó una imagen');
     }
 
     const base64 = file.buffer.toString('base64');
@@ -50,7 +50,7 @@ export class AdviceController {
     @Body() body: { email: string; imageUrl: string; contentType: string },
   ) {
     if (!body.email || !body.imageUrl) {
-      throw new BadRequestException('email and imageUrl are required');
+      throw new BadRequestException('El email y la imagen son requeridos');
     }
 
     const localPath = await this.adviceService.copyToEmail(
@@ -64,11 +64,12 @@ export class AdviceController {
         localPath,
         body.contentType || 'image/jpeg',
       );
+      await this.adviceService.deleteFiles(body.imageUrl, localPath);
       return { sent: true };
     } catch (err) {
       this.logger.error(`Email send failed for ${body.email}: ${err}`);
       throw new InternalServerErrorException(
-        'Failed to send email. Please try again.',
+        'No se pudo enviar el email. Por favor, intentá de nuevo.',
       );
     }
   }
