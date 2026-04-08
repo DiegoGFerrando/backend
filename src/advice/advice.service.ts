@@ -37,7 +37,7 @@ export class AdviceService {
 
     // Composite logo onto bottom-right corner
     const logoBuffer = await readFile(logoPath);
-    const logo = sharp(logoBuffer).resize(120, 120, { fit: 'inside' });
+    const logo = sharp(logoBuffer).resize(160, 160, { fit: 'inside' });
     const composited = await sharp(imageBuffer)
       .composite([
         {
