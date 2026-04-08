@@ -43,6 +43,9 @@ export class EmailService {
           <div style="font-family: sans-serif; text-align: center; padding: 2rem;">
             <h2 style="color: #7c3aed;">¡Tu transformación está lista!</h2>
             ${mediaHtml}
+            <p style="margin-top: 1.5rem;">
+              <a href="https://www.instagram.com/adviceedtech/" target="_blank" style="color: #7c3aed; text-decoration: none;">Seguinos en Instagram @adviceedtech</a>
+            </p>
             <p style="color: #888; font-size: 0.85rem;">— Equipo Advice EdTech</p>
           </div>
         `,
