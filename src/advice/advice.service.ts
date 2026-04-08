@@ -7,6 +7,7 @@ import { ConfigService } from '@nestjs/config';
 import { writeFile, mkdir, access, copyFile, readFile } from 'fs/promises';
 import { join } from 'path';
 import { randomUUID } from 'crypto';
+import sharp from 'sharp';
 
 @Injectable()
 export class AdviceService {
@@ -21,16 +22,12 @@ export class AdviceService {
     const apiKey = this.config.get<string>('OPENAI_API_KEY');
 
     const logoPath = join(__dirname, '..', '..', 'logo.png');
-    const logoBase64 = (await readFile(logoPath)).toString('base64');
 
     const body = {
       model: 'gpt-image-1',
       prompt:
-        'Edit this photo: keep all people, their faces, clothing, and poses exactly as they are. Only replace the background with a futuristic tech environment with neon lights. Add a subtle cyan/purple neon glow effect around the edges of the people. Place the logo from the second image in the bottom-right corner of the final image, without its background, at a small size like a watermark. Do not modify the logo in any way, use the original image. Do not apply any filter to the logo',
-      images: [
-        { image_url: `data:image/jpeg;base64,${imageBase64}` },
-        { image_url: `data:image/jpeg;base64,${logoBase64}` },
-      ],
+        'Edit this photo: keep all people, their faces, clothing, and poses exactly as they are. Only replace the background with a futuristic tech environment with neon lights. Add a subtle cyan/purple neon glow effect around the edges of the people.',
+      images: [{ image_url: `data:image/jpeg;base64,${imageBase64}` }],
       input_fidelity: 'high',
       quality: 'medium',
       size: '1024x1024',
@@ -95,7 +92,22 @@ export class AdviceService {
       `Got image: image/jpeg | size: ${imageBuffer.length} bytes`,
     );
 
-    const { urlPath } = await this.saveFile(imageBuffer, 'image/jpeg');
+    // Composite logo onto bottom-right corner
+    const logoBuffer = await readFile(logoPath);
+    const logo = sharp(logoBuffer).resize(120, 120, { fit: 'inside' });
+    const composited = await sharp(imageBuffer)
+      .composite([
+        {
+          input: await logo.toBuffer(),
+          gravity: 'southeast',
+        },
+      ])
+      .jpeg()
+      .toBuffer();
+
+    this.logger.log(`Composited logo | final size: ${composited.length} bytes`);
+
+    const { urlPath } = await this.saveFile(composited, 'image/jpeg');
 
     return {
       imageUrl: urlPath,
