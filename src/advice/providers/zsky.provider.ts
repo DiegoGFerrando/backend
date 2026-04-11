@@ -8,7 +8,7 @@ import { AiProvider, AiGenerationResult } from './ai-provider.interface';
 import { ZSkySubmitResponse, ZSkyPollResponse } from './zsky.types';
 
 const PROMPT =
-  'In this image there is at least one person. Replace the background with a futuristic tech one. Apply a tech neon glow filter to the people. Do not change anything else.';
+  'In this image there is at least one person. Replace the background with a futuristic tech one. Do not add any more people. Apply a tech neon glow filter to the people. Do not change anything else.';
 
 @Injectable()
 export class ZskyProvider implements AiProvider {

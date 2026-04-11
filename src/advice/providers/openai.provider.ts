@@ -7,7 +7,7 @@ import { ConfigService } from '@nestjs/config';
 import { AiProvider, AiGenerationResult } from './ai-provider.interface';
 
 const PROMPT =
-  'Edit this photo: keep all people, their faces, clothing, and poses exactly as they are. Only replace the background with a futuristic tech environment with neon lights. Add a subtle cyan/purple neon glow effect around the edges of the people.';
+  'Edit this photo: keep all people, their faces, clothing, and poses exactly as they are. Do not add any more people. Only replace the background with a futuristic tech environment with neon lights. Add a subtle cyan/purple neon glow effect around the edges of the people.';
 
 @Injectable()
 export class OpenAiProvider implements AiProvider {
