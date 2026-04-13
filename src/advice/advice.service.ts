@@ -1,9 +1,4 @@
-import {
-  Injectable,
-  Logger,
-  InternalServerErrorException,
-  Inject,
-} from '@nestjs/common';
+import { Injectable, Logger, Inject } from '@nestjs/common';
 import {
   writeFile,
   mkdir,
